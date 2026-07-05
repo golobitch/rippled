@@ -84,6 +84,7 @@ enum class LedgerNameSpace : std::uint16_t {
     Vault = 'V',
     LoanBroker = 'l',  // lower-case L
     Loan = 'L',
+    Authorization = 'U',
 
     // No longer used or supported. Left here to reserve the space to avoid accidental reuse.
     Contract [[deprecated]] = 'c',
@@ -575,6 +576,18 @@ Keylet
 permissionedDomain(uint256 const& domainID) noexcept
 {
     return {ltPERMISSIONED_DOMAIN, domainID};
+}
+
+Keylet
+authorization(AccountID const& account, std::uint32_t seq) noexcept
+{
+    return {ltAUTHORIZATION, indexHash(LedgerNameSpace::Authorization, account, seq)};
+}
+
+Keylet
+authorization(uint256 const& authorizationID) noexcept
+{
+    return {ltAUTHORIZATION, authorizationID};
 }
 
 }  // namespace keylet

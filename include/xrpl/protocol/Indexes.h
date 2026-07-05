@@ -333,6 +333,12 @@ permissionedDomain(AccountID const& account, std::uint32_t seq) noexcept;
 
 Keylet
 permissionedDomain(uint256 const& domainID) noexcept;
+
+Keylet
+authorization(AccountID const& account, std::uint32_t seq) noexcept;
+
+Keylet
+authorization(uint256 const& authorizationID) noexcept;
 }  // namespace keylet
 
 // Everything below is deprecated and should be removed in favor of keylets:
