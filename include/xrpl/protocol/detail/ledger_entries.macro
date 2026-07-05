@@ -616,5 +616,21 @@ LEDGER_ENTRY(ltLOAN, 0x0089, Loan, loan, ({
     {sfLoanScale,                SoeDefault},
 }))
 
+LEDGER_ENTRY(ltAUTHORIZATION, 0x008a, Authorization, authorization, ({
+    {sfPreviousTxnID,       SoeRequired},
+    {sfPreviousTxnLgrSeq,   SoeRequired},
+    {sfOwnerNode,           SoeRequired},
+    {sfAccount,             SoeRequired},
+    {sfAuthorizedAccount,   SoeRequired},
+    {sfLimitAmount,         SoeRequired},
+    {sfInterval,            SoeDefault},
+    {sfStartTime,           SoeOptional},
+    {sfExpiration,          SoeOptional},
+    {sfDeliveredInPeriod,   SoeOptional},
+    {sfLastPullTimestamp,   SoeDefault},
+    {sfFlags,               SoeRequired},
+}))
+
+
 #undef EXPAND
 #undef LEDGER_ENTRY_DUPLICATE
