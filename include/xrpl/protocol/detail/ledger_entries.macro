@@ -628,7 +628,6 @@ LEDGER_ENTRY(ltAUTHORIZATION, 0x008a, Authorization, authorization, ({
     {sfExpiration,          SoeOptional},
     {sfDeliveredInPeriod,   SoeOptional},
     {sfLastPullTimestamp,   SoeDefault},
-    {sfFlags,               SoeRequired},
 }))
 
 
