@@ -131,6 +131,7 @@ enum TEMcodes : TERUnderlyingType {
     temINVALID_INNER_BATCH,
     temBAD_MPT,
     temBAD_CIPHERTEXT,
+    temBAD_INTERVAL,
 };
 
 //------------------------------------------------------------------------------
@@ -368,6 +369,12 @@ enum TECcodes : TERUnderlyingType {
     // reclaimed after those networks reset.
     tecNO_DELEGATE_PERMISSION = 198,
     tecBAD_PROOF = 199,
+    tecAUTH_NOT_FOUND = 200,
+    tecAUTH_WRONG_PAYEE = 201,
+    tecAUTH_NOT_STARTED = 202,
+    tecAUTH_EXPIRED = 203,
+    tecAUTH_BAD_CURRENCY = 204,
+    tecAUTH_LIMIT_EXCEEDED = 205
 };
 
 //------------------------------------------------------------------------------

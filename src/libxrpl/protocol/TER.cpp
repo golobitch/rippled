@@ -107,6 +107,12 @@ transResults()
         MAKE_ERROR(tecPSEUDO_ACCOUNT,                "This operation is not allowed against a pseudo-account."),
         MAKE_ERROR(tecPRECISION_LOSS,                "The amounts used by the transaction cannot interact."),
         MAKE_ERROR(tecBAD_PROOF,                     "Proof cannot be verified"),
+        MAKE_ERROR(tecAUTH_NOT_FOUND,                "The referenced Authorization object was not found."),
+        MAKE_ERROR(tecAUTH_WRONG_PAYEE,              "The signer is not the account authorized to pull against this authorization."),
+        MAKE_ERROR(tecAUTH_NOT_STARTED,              "The authorization is not yet active."),
+        MAKE_ERROR(tecAUTH_EXPIRED,                  "The authorization has expired."),
+        MAKE_ERROR(tecAUTH_BAD_CURRENCY,             "The pull amount currency or issuer does not match the authorization."),
+        MAKE_ERROR(tecAUTH_LIMIT_EXCEEDED,           "The pull would exceed the authorization limit."),
 
         MAKE_ERROR(tefALREADY,                     "The exact transaction was already in this ledger."),
         MAKE_ERROR(tefBAD_ADD_AUTH,                "Not authorized to add account."),
@@ -203,6 +209,7 @@ transResults()
         MAKE_ERROR(temBAD_TRANSFER_FEE,          "Malformed: Transfer fee is outside valid range."),
         MAKE_ERROR(temINVALID_INNER_BATCH,       "Malformed: Invalid inner batch transaction."),
         MAKE_ERROR(temBAD_CIPHERTEXT,            "Malformed: Invalid ciphertext."),
+        MAKE_ERROR(temBAD_INTERVAL,              "Malformed: Interval must be zero or at least 60 seconds."),
 
         MAKE_ERROR(terRETRY,                  "Retry transaction."),
         MAKE_ERROR(terFUNDS_SPENT,            "DEPRECATED."),
