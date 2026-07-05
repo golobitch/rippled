@@ -414,6 +414,28 @@ parseDirectoryNode(
 }
 
 static std::expected<uint256, json::Value>
+parseAuthorization(
+    json::Value const& params,
+    json::StaticString const fieldName,
+    [[maybe_unused]] unsigned const apiVersion)
+{
+    if (!params.isObject())
+    {
+        return parseObjectID(params, fieldName);
+    }
+
+    auto const id =
+        LedgerEntryHelpers::requiredAccountID(params, jss::account, "malformedAddress");
+    if (!id)
+        return std::unexpected(id.error());
+    auto const seq = LedgerEntryHelpers::requiredUInt32(params, jss::seq, "malformedSeq");
+    if (!seq)
+        return std::unexpected(seq.error());
+
+    return keylet::authorization(*id, *seq).key;
+}
+
+static std::expected<uint256, json::Value>
 parseEscrow(
     json::Value const& params,
     json::StaticString const fieldName,
