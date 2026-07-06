@@ -35,6 +35,8 @@ JSS(AssetClass);                  // in: Oracle
 JSS(AssetPrice);                  // in: Oracle
 JSS(AuthAccount);                 // in: AMM Auction Slot
 JSS(AuthAccounts);                // in: AMM Auction Slot
+JSS(AuthorizationID);             // in: DirectDebit TransactionSign; field
+JSS(AuthorizedAccount);           // in: DirectDebit - create TransactionSign; field.
 JSS(BaseAsset);                   // in: Oracle
 JSS(BidMax);                      // in: AMM Bid
 JSS(BidMin);                      // in: AMM Bid
@@ -48,6 +50,7 @@ JSS(EPrice);                      // in: AMM Deposit option
 JSS(Fee);                         // in/out: TransactionSign; field.
 JSS(Flags);                       // in/out: TransactionSign; field.
 JSS(Holder);                      // field.
+JSS(Interval);                    // in: DirectDebit - create TransactionSign; field.
 JSS(Invalid);                     //
 JSS(Issuer);                      // in: Credential transactions
 JSS(IssuingChainDoor);            // field.
@@ -80,6 +83,7 @@ JSS(SetFlag);                     // field.
 JSS(Signer);                      // field.
 JSS(Signers);                     // field.
 JSS(SigningPubKey);               // field.
+JSS(StartTime);                   // in: DirectDebit - create TransactionSign; field.
 JSS(Subject);                     // in: Credential transactions
 JSS(TakerGets);                   // field.
 JSS(TakerPays);                   // field.
