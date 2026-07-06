@@ -36,6 +36,9 @@ AuthorizationUpdate::preflight(PreflightContext const& ctx)
     //   temBAD_INTERVAL    - Interval > 0 && Interval < 60
     //   temMALFORMED       - none of LimitAmount/Interval/StartTime/Expiration
     //                        present; or StartTime && Expiration <= StartTime
+    if (!ctx.rules.enabled(featureDirectDebit)) {
+        return temDISABLED;
+    }
     return tesSUCCESS;
 }
 

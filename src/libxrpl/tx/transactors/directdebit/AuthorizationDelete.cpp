@@ -30,6 +30,9 @@ NotTEC
 AuthorizationDelete::preflight(PreflightContext const& ctx)
 {
     // TODO(spec 4.2.3): temDISABLED if !ctx.rules.enabled(featureDirectDebit).
+    if (!ctx.rules.enabled(featureDirectDebit)) {
+        return temDISABLED;
+    }
     return tesSUCCESS;
 }
 

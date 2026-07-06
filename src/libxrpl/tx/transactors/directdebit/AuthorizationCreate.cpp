@@ -36,6 +36,9 @@ AuthorizationCreate::preflight(PreflightContext const& ctx)
     //   temBAD_INTERVAL    - Interval > 0 && Interval < 60
     //   temDST_IS_SRC      - AuthorizedAccount == Account
     //   temMALFORMED       - StartTime && Expiration && Expiration <= StartTime
+    if (!ctx.rules.enabled(featureDirectDebit)) {
+        return temDISABLED;
+    }
     return tesSUCCESS;
 }
 
