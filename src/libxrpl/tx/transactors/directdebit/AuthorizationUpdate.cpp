@@ -8,6 +8,7 @@
 #include <xrpl/protocol/Indexes.h>
 #include <xrpl/protocol/Protocol.h>
 #include <xrpl/protocol/SField.h>
+#include <xrpl/protocol/STAmount.h>
 #include <xrpl/protocol/STLedgerEntry.h>
 #include <xrpl/protocol/STTx.h>
 #include <xrpl/protocol/TER.h>
@@ -32,13 +33,41 @@ AuthorizationUpdate::preflight(PreflightContext const& ctx)
     // TODO(spec 4.2.2.4 - tem checks):
     //   temDISABLED   if !ctx.rules.enabled(featureDirectDebit)
     //   temBAD_AMOUNT      - LimitAmount non-positive / malformed
-    //   temBAD_EXPIRATION  - Expiration > 0 && not strictly in the future
     //   temBAD_INTERVAL    - Interval > 0 && Interval < 60
+    //   temBAD_EXPIRATION  - Expiration > 0 && not strictly in the future
     //   temMALFORMED       - none of LimitAmount/Interval/StartTime/Expiration
     //                        present; or StartTime && Expiration <= StartTime
     if (!ctx.rules.enabled(featureDirectDebit)) {
         return temDISABLED;
     }
+
+    if (auto const optLimit = ctx.tx[~sfLimitAmount]) {
+        STAmount const limit = *optLimit;
+        if (!isLegalNet(limit) || !isLegalMPT(limit) || limit <= beast::kZero) {
+            return temBAD_AMOUNT;
+        }
+    }
+
+    if (auto const iv = ctx.tx[~sfInterval]; iv && *iv > 0 && *iv < 60) {
+        return temBAD_INTERVAL;
+    }
+
+    if (auto const exp = ctx.tx[~sfExpiration]; exp && *exp == 0) {
+        return temBAD_EXPIRATION;
+    }
+
+    // at least one field must be present.
+    if (!ctx.tx[~sfLimitAmount] && !ctx.tx[~sfInterval] &&
+        !ctx.tx[~sfStartTime] && !ctx.tx[~sfExpiration]) {
+        return temMALFORMED;
+    }
+
+    // if starttime and expiration were provided, expiration must be after starttime
+    if (ctx.tx[~sfStartTime] && ctx.tx[~sfExpiration] &&
+        ctx.tx[sfExpiration] <= ctx.tx[sfStartTime]) {
+        return temMALFORMED;
+    }
+
     return tesSUCCESS;
 }
 
