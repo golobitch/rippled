@@ -8,6 +8,7 @@
 #include <xrpl/protocol/Indexes.h>
 #include <xrpl/protocol/Protocol.h>
 #include <xrpl/protocol/SField.h>
+#include <xrpl/protocol/STAmount.h>
 #include <xrpl/protocol/STLedgerEntry.h>
 #include <xrpl/protocol/STTx.h>
 #include <xrpl/protocol/TER.h>
@@ -32,13 +33,38 @@ AuthorizationCreate::preflight(PreflightContext const& ctx)
     // TODO(spec 4.2.1.4 - tem checks):
     //   temDISABLED  if !ctx.rules.enabled(featureDirectDebit)
     //   temBAD_AMOUNT      - LimitAmount non-positive / malformed
-    //   temBAD_EXPIRATION  - Expiration not strictly in the future
     //   temBAD_INTERVAL    - Interval > 0 && Interval < 60
     //   temDST_IS_SRC      - AuthorizedAccount == Account
+    //   temBAD_EXPIRATION  - Expiration is 0
     //   temMALFORMED       - StartTime && Expiration && Expiration <= StartTime
     if (!ctx.rules.enabled(featureDirectDebit)) {
         return temDISABLED;
     }
+
+    // this one is MPT capable, so we need to validate that as well
+    STAmount const limit = ctx.tx[sfLimitAmount];
+    if (!isLegalNet(limit) || !isLegalMPT(limit) || limit <= beast::kZero) {
+        return temBAD_AMOUNT;
+    }
+
+    //interval is optional, so check that it exists first
+    if (auto const iv = ctx.tx[~sfInterval]; iv && *iv > 0 && *iv < 60) {
+        return temBAD_INTERVAL;
+    }
+
+    if (ctx.tx[sfAccount] == ctx.tx[sfAuthorizedAccount]) {
+        return temDST_IS_SRC;
+    }
+
+    if (auto const exp = ctx.tx[~sfExpiration]; exp && *exp == 0) {
+        return temBAD_EXPIRATION;
+    }
+
+    if (ctx.tx[~sfStartTime] && ctx.tx[~sfExpiration] &&
+        ctx.tx[sfExpiration] <= ctx.tx[sfStartTime]) {
+        return temMALFORMED;
+    }
+
     return tesSUCCESS;
 }
 
